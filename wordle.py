@@ -18,6 +18,10 @@ RED   = (255,   0,   0)
 Dimgray = (105, 105, 105)
 Darkgray = (169, 169, 169)
 
+#Setting Initial Screen BackgoundColor
+screen.fill(Darkgray)
+
+
 done = False
 
 while not done:
