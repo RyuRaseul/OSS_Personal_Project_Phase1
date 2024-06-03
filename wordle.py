@@ -33,7 +33,7 @@ tile_spacing_y = 10
 #current_y_pos = 70
 key_pressed = ""
 letter_font = pygame.font.SysFont("arial", 70, True, False)
-letter_size = 75
+#letter_size = 75
 
 
 #Var for guessing word
