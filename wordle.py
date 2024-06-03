@@ -37,6 +37,18 @@ class Tile:
 	def draw(self):
 		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, tile_size, tile_size], 4)
 
+class Letter:
+	def __init__(self, letter, x_pos, y_pos):
+		self.bg_color = WHITE
+		self.text_color = BLACK
+		self.x = x_pos
+		self.y = y_pos
+		self.letter = letter
+		self.text_surface = letter_font.render(self.letter, True, self.text_color)
+		self.text_rect = self.text_surface.get_rect(center=(x_pos +  tile_width/2, y_pos + tile_height/2))
+	def draw(self):
+		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, letter_size, letter_size], 4)
+		screen.blit(self.text_surface, self.text_rect)
 
 #Creating Rect OBJ for word tile
 for i in range(6):
