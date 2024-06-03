@@ -123,7 +123,7 @@ while not done:
 					delete_letter()
 			else:
 				key_pressed = event.unicode.upper()
-				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" and key_pressed != "":
 					if len(guess_word_string) < 5:
 						create_letter()
 	pygame.display.flip()
