@@ -87,18 +87,20 @@ def delete_letter():
 	default_x -= tile_size + tile_spacing_x
 
 def guess_check(guessed_word):
-	global guess_word_string
+	global guess_word_string, total_guess
 	for i in range(5):
-		guessed_letter = guessed_word[i].letter.lower()
+		check_idx = i + 5*total_guess
+		guessed_letter = guessed_word[check_idx].letter.lower()
 		if guessed_letter in answer:
 			if guessed_letter == answer[i]:
-				guessed_word[i].bg_color = GREEN
+				guessed_word[check_idx].bg_color = GREEN
 			else:
-				guessed_word[i].bg_color = YELLOW
+				guessed_word[check_idx].bg_color = YELLOW
 		else:
-			guessed_word[i].bg_color = Dimgray
-		guessed_word[i].text_color = WHITE
-		guessed_word[i].draw()
+			guessed_word[check_idx].bg_color = Dimgray
+		guessed_word[check_idx].text_color = WHITE
+		guessed_word[check_idx].draw()
+
 #Creating Rect OBJ for word tile
 for i in range(6):
 	for j in range(5):
@@ -118,6 +120,7 @@ while not done:
 						default_y += 90
 						guess_word_string = ""
 						default_x = 80
+						total_guess += 1
 			elif event.key == pygame.K_BACKSPACE:
 				if len(guess_word_string) > 0:
 					delete_letter()
