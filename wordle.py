@@ -41,6 +41,9 @@ total_guess = 0
 guess_word = []
 guess_word_string = ""
 
+answer = "final"
+#answer = random.choice()
+
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
 		self.x = x_pos
@@ -82,6 +85,19 @@ def delete_letter():
 	guess_word.pop()
 	default_x -= tile_size + tile_spacing_x
 
+def guess_check(guessed_word):
+	global guess_word_string
+	for i in range(5):
+		guessed_letter = guessed_word[i].letter.lower()
+		if guessed_letter in answer:
+			if guessed_letter == answer[i]:
+				guessed_word[i].bg_color = GREEN
+			else:
+				guessed_word[i].bg_color = BLUE
+		else:
+			guessed_word[i].bg_color = Dimgray
+		guessed_word[i].text_color = WHITE
+		guessed_word[i].draw()
 #Creating Rect OBJ for word tile
 for i in range(6):
 	for j in range(5):
@@ -96,8 +112,8 @@ while not done:
 			done = True
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
-				if len(guess_word_string) == 5:
-					if guess_word_string.lower() in words.WORDS:
+				if len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
+						guess_check(guess_word)
 						default_y += 90
 						guess_word_string = ""
 						default_x = 80
