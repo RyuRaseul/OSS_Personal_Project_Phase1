@@ -28,6 +28,11 @@ tile_size = 80
 tile_spacing_x = 10
 tile_spacing_y = 10
 
+#Var for guessing word
+total_guess = 0
+guess_word = []
+guess_word_string = ""
+
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
 		self.x = x_pos
