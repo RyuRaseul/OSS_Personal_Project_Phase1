@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-
+from words import *
 #Pygame Initailize
 pygame.init()
 
@@ -20,6 +20,11 @@ Darkgray = (169, 169, 169)
 
 #Setting Initial Screen BackgoundColor
 screen.fill(Darkgray)
+
+class Tile:
+	def __init__(self, bg_color , x, y):
+		
+
 
 #Var for word_tile
 default_x = 80
