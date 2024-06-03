@@ -41,8 +41,8 @@ class Tile:
 #Creating Rect OBJ for word tile
 for i in range(6):
 	for j in range(5):
-		pygame.draw.rect(screen, Dimgray, [default_x + j *(tile_width + tile_spacing_x), default_y + i*(tile_height + tile_spacing_y), tile_width, tile_height], 4)	
-
+		new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
+		new_tile.draw()
 done = False
 
 while not done:
