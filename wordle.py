@@ -32,6 +32,8 @@ tile_spacing_y = 10
 total_guess = 0
 guess_word = []
 guess_word_string = ""
+key_pressed = ""
+
 
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
