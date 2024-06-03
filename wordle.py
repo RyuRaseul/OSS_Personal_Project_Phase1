@@ -84,6 +84,11 @@ while not done:
 		if event.type == pygame.QUIT:
 			done = True
 		elif event.type == pygame.KEYDOWN:
+			if event.key == pygame.K_RETURN:
+				if len(guess_word_string) == 5:
+					default_y += 90
+					guess_word_string = ""
+					default_x = 80
 			key_pressed = event.unicode.upper()
 			if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
 				if len(guess_word_string) < 5:
