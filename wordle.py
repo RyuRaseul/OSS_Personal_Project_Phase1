@@ -63,6 +63,9 @@ class Letter:
 		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, tile_size, tile_size])
 		pygame.draw.rect(screen, BLACK, [self.x, self.y, tile_size, tile_size], 4)
 		screen.blit(self.text_surface, self.text_rect)
+	def delete(self):
+		pygame.draw.rect(screen, Darkgray, [self.x, self.y, tile_size, tile_size]) 		
+		pygame.draw.rect(screen, BLACK, [self.x, self.y, tile_size, tile_size], 4)
 
 def create_letter():
 	global default_x, guess_word_string
@@ -70,6 +73,14 @@ def create_letter():
 	new_letter.draw()
 	default_x += tile_size + tile_spacing_x
 	guess_word_string += key_pressed
+	guess_word.append(new_letter)
+
+def delete_letter():
+	global default_x, guess_word_string
+	guess_word_string = guess_word_string[:-1]
+	guess_word[-1].delete()
+	guess_word.pop()
+	default_x -= tile_size + tile_spacing_x
 
 #Creating Rect OBJ for word tile
 for i in range(6):
@@ -90,10 +101,14 @@ while not done:
 						default_y += 90
 						guess_word_string = ""
 						default_x = 80
-			key_pressed = event.unicode.upper()
-			if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
-				if len(guess_word_string) < 5:
-					create_letter()
+			elif event.key == pygame.K_BACKSPACE:
+				if len(guess_word_string) > 0:
+					delete_letter()
+			else:
+				key_pressed = event.unicode.upper()
+				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+					if len(guess_word_string) < 5:
+						create_letter()
 	pygame.display.flip()
 
 
