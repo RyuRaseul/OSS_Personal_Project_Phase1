@@ -5,7 +5,7 @@ from pygame.locals import *
 pygame.init()
 
 #Screen Setting
-size = [700, 900]
+size = [600, 900]
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Wordle")
 
