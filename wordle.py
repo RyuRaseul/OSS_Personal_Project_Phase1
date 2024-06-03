@@ -5,7 +5,7 @@ from pygame.locals import *
 pygame.init()
 
 #Screen Setting
-size = [800, 600]
+size = [700, 900]
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Wordle")
 
@@ -21,7 +21,6 @@ Darkgray = (169, 169, 169)
 #Setting Initial Screen BackgoundColor
 screen.fill(Darkgray)
 
-
 done = False
 
 while not done:
@@ -29,6 +28,8 @@ while not done:
 		if event.type == pygame.QUIT:
 			done = True
 	pygame.display.flip()
+
+
 
 #Quit Code
 pygame.quit()
