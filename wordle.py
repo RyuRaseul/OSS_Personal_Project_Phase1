@@ -21,6 +21,19 @@ Darkgray = (169, 169, 169)
 #Setting Initial Screen BackgoundColor
 screen.fill(Darkgray)
 
+#Var for word_tile
+default_x = 80
+default_y = 30
+tile_width = 80
+tile_height = 80
+tile_spacing_x = 10
+tile_spacing_y = 10
+
+#Creating Rect OBJ for word tile
+for i in range(6):
+	for j in range(5):
+		pygame.draw.rect(screen, Dimgray, [default_x + j *(tile_width + tile_spacing_x), default_y + i*(tile_height + tile_spacing_y), tile_width, tile_height], 4)	
+
 done = False
 
 while not done:
