@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from words import *
+import words
 #Pygame Initailize
 pygame.init()
 
@@ -86,9 +86,10 @@ while not done:
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
 				if len(guess_word_string) == 5:
-					default_y += 90
-					guess_word_string = ""
-					default_x = 80
+					if guess_word_string.lower() in words.WORDS:
+						default_y += 90
+						guess_word_string = ""
+						default_x = 80
 			key_pressed = event.unicode.upper()
 			if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
 				if len(guess_word_string) < 5:
