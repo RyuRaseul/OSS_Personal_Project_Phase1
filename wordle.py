@@ -15,6 +15,7 @@ WHITE = (255, 255, 255)
 BLUE = (0, 0, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
 Dimgray = (105, 105, 105)
 Darkgray = (169, 169, 169)
 
@@ -93,7 +94,7 @@ def guess_check(guessed_word):
 			if guessed_letter == answer[i]:
 				guessed_word[i].bg_color = GREEN
 			else:
-				guessed_word[i].bg_color = BLUE
+				guessed_word[i].bg_color = YELLOW
 		else:
 			guessed_word[i].bg_color = Dimgray
 		guessed_word[i].text_color = WHITE
