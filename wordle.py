@@ -92,7 +92,7 @@ class Keyboard:
 		self.bg_color = WHITE
 		self.key_color = BLACK
 		self.key_surface = key_font.render(self.key, True, self.key_color)
-		self.key_rect = self.key_surface.get_rect(center = (self.x + 24, self.y+35))
+		self.key_rect = self.key_surface.get_rect(center = (self.x + 24, self.y+33))
 	def draw(self):
 		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
 		screen.blit(self.key_surface, self.key_rect)
@@ -123,14 +123,26 @@ def guess_check(guessed_word):
 		if guessed_letter in answer:
 			if guessed_letter == answer[i]:
 				guessed_word[check_idx].bg_color = GREEN
+				for letter in keys:
+					if letter.key == guessed_letter.upper():
+						letter.bg_color = GREEN
+						letter.draw()
 				if check_result == True:
 					result = "Win"
 			else:
 				guessed_word[check_idx].bg_color = YELLOW
+				for letter in keys:
+					if letter.key == guessed_letter.upper():
+						letter.bg_color = YELLOW
+						letter.draw()
 				result = ""
 				check_result = False
 		else:
 			guessed_word[check_idx].bg_color = Dimgray
+			for letter in keys:
+					if letter.key == guessed_letter.upper():
+						letter.bg_color = Dimgray
+						letter.draw()
 			result = ""
 			check_result = False
 		guessed_word[check_idx].text_color = WHITE
