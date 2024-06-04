@@ -25,7 +25,7 @@ screen.fill(Darkgray)
 
 #Var for word_tile
 default_x = 80
-default_y = 30
+default_y = 70
 tile_size = 80
 tile_spacing_x = 10
 tile_spacing_y = 10
@@ -35,8 +35,14 @@ tile_spacing_y = 10
 #current_y_pos = 70
 key_pressed = ""
 letter_font = pygame.font.SysFont("arial", 70, True, False)
+key_font = pygame.font.SysFont("arial", 40, True, False)
 #letter_size = 75
 
+#Keyboard List
+keyboard_keys = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
+keys = []
+keyboard_x = 15
+keyboard_y = 630
 
 #Var for guessing word
 total_guess = 0
@@ -77,6 +83,19 @@ class Letter:
 	def delete(self):
 		pygame.draw.rect(screen, Darkgray, [self.x, self.y, tile_size, tile_size]) 		
 		pygame.draw.rect(screen, BLACK, [self.x, self.y, tile_size, tile_size], 4)
+
+class Keyboard:
+	def __init__(self, key, x_pos, y_pos):
+		self.x = x_pos
+		self.y = y_pos
+		self.key = key
+		self.bg_color = WHITE
+		self.key_color = BLACK
+		self.key_surface = key_font.render(self.key, True, self.key_color)
+		self.key_rect = self.key_surface.get_rect(center = (self.x + 24, self.y+35))
+	def draw(self):
+		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
+		screen.blit(self.key_surface, self.key_rect)
 
 def create_letter():
 	global default_x, guess_word_string
@@ -129,14 +148,26 @@ def make_tiles():
 			new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
 			new_tile.draw()
 
+for i in range(3):
+	for letter in keyboard_keys[i]:
+		new_key = Keyboard(letter, keyboard_x, keyboard_y)
+		keys.append(new_key)
+		new_key.draw()	
+		keyboard_x += 58
+	keyboard_y += 90
+	if i == 0:
+		keyboard_x = 44
+	elif i == 1:
+		keyboard_x = 102
+
 def game_end():
 	pygame.draw.rect(screen, Darkgray, (0, 600, 600, 300))
 	end_message_font = pygame.font.SysFont("arial", 40)
 	end_message_text = end_message_font.render("Press ENTER Key to Restart!", True, BLACK)
-	end_message_rect = end_message_text.get_rect(center = (size[0]/2, 725))
+	end_message_rect = end_message_text.get_rect(center = (size[0]/2, 760))
 	answer_font = pygame.font.SysFont("arial", 40)
 	answer_text = answer_font.render(f"Answer Word was {answer.upper()}!", True, BLACK)
-	answer_rect = answer_text.get_rect(center = (size[0]/2, 675))
+	answer_rect = answer_text.get_rect(center = (size[0]/2, 710))
 	screen.blit(answer_text, answer_rect)
 	screen.blit(end_message_text, end_message_rect)
 
@@ -148,6 +179,10 @@ def restart():
 	total_guess = 0
 	guess_word = []
 	result = ""
+	for key_tile in keys:
+		key_tile.bg_color = WHITE
+		key_tile.draw()
+
 
 done = False
 make_tiles()
