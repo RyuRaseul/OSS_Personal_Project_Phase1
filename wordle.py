@@ -49,6 +49,16 @@ total_guess = 0
 guess_word = []
 guess_word_string = ""
 
+#Var for Hint Button
+hint_x = 460
+hint_y = 20
+hint_count = 5
+hint_font = pygame.font.SysFont("arial", 25)
+#Var for distinguish USED(YELLOW, GREEN), UNUSED(GRAY), UNKNOWN(WHITE)
+USED_LIST = ""
+UNUSED_LIST = ""
+UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
+
 #answer = "final"
 #random.seed(5)
 answer = random.choice(words.WORDS)
@@ -115,7 +125,7 @@ def delete_letter():
 	#default_x -= tile_size + tile_spacing_x
 
 def guess_check(guessed_word):
-	global guess_word_string, total_guess, result
+	global guess_word_string, total_guess, result, USED_LIST, UNUSED_LIST, UNKNOWN_LIST
 	check_result = True
 	for i in range(5):
 		check_idx = i + 5*total_guess
@@ -123,6 +133,9 @@ def guess_check(guessed_word):
 		if guessed_letter in answer:
 			if guessed_letter == answer[i]:
 				guessed_word[check_idx].bg_color = GREEN
+				if guessed_letter.upper() not in USED_LIST:
+					USED_LIST += guessed_letter.upper()
+					UNKNOWN_LIST = UNKNOWN_LIST.replace(guessed_letter.upper(), '')
 				for letter in keys:
 					if letter.key == guessed_letter.upper():
 						letter.bg_color = GREEN
@@ -131,6 +144,9 @@ def guess_check(guessed_word):
 					result = "Win"
 			else:
 				guessed_word[check_idx].bg_color = YELLOW
+				if guessed_letter.upper() not in USED_LIST:
+					USED_LIST += guessed_letter.upper()
+					UNKNOWN_LIST = UNKNOWN_LIST.replace(guessed_letter.upper(), '')
 				for letter in keys:
 					if letter.key == guessed_letter.upper():
 						letter.bg_color = YELLOW
@@ -139,6 +155,9 @@ def guess_check(guessed_word):
 				check_result = False
 		else:
 			guessed_word[check_idx].bg_color = Dimgray
+			if guessed_letter.upper() not in UNUSED_LIST:
+				UNUSED_LIST += guessed_letter.upper()
+				UNKNOWN_LIST = UNKNOWN_LIST.replace(guessed_letter.upper(), '')
 			for letter in keys:
 					if letter.key == guessed_letter.upper():
 						letter.bg_color = Dimgray
@@ -172,6 +191,11 @@ for i in range(3):
 	elif i == 1:
 		keyboard_x = 102
 
+pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
+hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
+hint_rect = hint_text.get_rect(center = (510, 35))
+screen.blit(hint_text, hint_rect)
+
 def game_end():
 	pygame.draw.rect(screen, Darkgray, (0, 600, 600, 300))
 	end_message_font = pygame.font.SysFont("arial", 40)
@@ -184,16 +208,50 @@ def game_end():
 	screen.blit(end_message_text, end_message_rect)
 
 def restart():
-	global answer, total_guess, guess_word, result
+	global answer, total_guess, guess_word, result, hint_text, hint_rect
 	screen.fill(Darkgray)
 	make_tiles()
 	answer = random.choice(words.WORDS)
 	total_guess = 0
 	guess_word = []
 	result = ""
+	USED_LIST = ""
+	UNUSED_LIST = ""
+	UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
+	pygame.draw.rect(screen, Darkgray, (hint_x, hint_y, 100, 35))
+	pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
+	hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
+	hint_rect = hint_text.get_rect(center = (510, 35))
+	screen.blit(hint_text, hint_rect)
+
+
 	for key_tile in keys:
 		key_tile.bg_color = WHITE
 		key_tile.draw()
+
+def Hint():
+	global USED_LIST, UNUSED_LIST, UNKNOWN_LIST, hint_text, hint_rect
+	hint_letter = random.choice(UNKNOWN_LIST)
+	if hint_letter.lower() in answer:
+		for letter in keys:
+			if letter.key == hint_letter:
+				letter.bg_color = YELLOW
+				letter.draw()
+				USED_LIST += hint_letter
+				UNKNOWN_LIST = UNKNOWN_LIST.replace(hint_letter, '')
+	else:
+		for letter in keys:
+			if letter.key == hint_letter:
+				letter.bg_color = Dimgray
+				letter.draw()
+				UNUSED_LIST += hint_letter
+				UNKNOWN_LIST = UNKNOWN_LIST.replace(hint_letter, '')
+	pygame.draw.rect(screen, Darkgray, (hint_x, hint_y, 100, 35))
+	pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
+	hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
+	hint_rect = hint_text.get_rect(center = (510, 35))
+	screen.blit(hint_text, hint_rect)
+
 
 
 done = False
@@ -221,6 +279,11 @@ while not done:
 				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" and key_pressed != "" and result == "":
 					if len(guess_word_string) < 5:
 						create_letter()
+		elif event.type == pygame.MOUSEBUTTONDOWN:
+			mouse_pos = pygame.mouse.get_pos()
+			if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
+				hint_count -= 1	
+				Hint()
 	pygame.display.flip()
 
 
