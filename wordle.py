@@ -43,9 +43,9 @@ total_guess = 0
 guess_word = []
 guess_word_string = ""
 
-#answer = "final"
+answer = "final"
 #random.seed(5)
-answer = random.choice(words.WORDS)
+#answer = random.choice(words.WORDS)
 
 
 #Var for game_result "Win", "Lose", ""
@@ -80,9 +80,11 @@ class Letter:
 
 def create_letter():
 	global default_x, guess_word_string
-	new_letter = Letter(key_pressed, default_x, default_y)
+	create_x_idx = len(guess_word)%5
+	create_y_idx = len(guess_word)//5
+	new_letter = Letter(key_pressed, default_x + create_x_idx*(tile_spacing_x + tile_size), default_y + create_y_idx*(tile_spacing_y + tile_size))
 	new_letter.draw()
-	default_x += tile_size + tile_spacing_x
+	#default_x += tile_size + tile_spacing_x
 	guess_word_string += key_pressed
 	guess_word.append(new_letter)
 
@@ -91,7 +93,7 @@ def delete_letter():
 	guess_word_string = guess_word_string[:-1]
 	guess_word[-1].delete()
 	guess_word.pop()
-	default_x -= tile_size + tile_spacing_x
+	#default_x -= tile_size + tile_spacing_x
 
 def guess_check(guessed_word):
 	global guess_word_string, total_guess, result
@@ -121,32 +123,55 @@ def guess_check(guessed_word):
 		result = "Lose"
 
 #Creating Rect OBJ for word tile
-for i in range(6):
-	for j in range(5):
-		new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
-		new_tile.draw()
+def make_tiles():
+	for i in range(6):
+		for j in range(5):
+			new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
+			new_tile.draw()
+
+def game_end():
+	pygame.draw.rect(screen, Darkgray, (0, 600, 600, 300))
+	end_message_font = pygame.font.SysFont("arial", 40)
+	end_message_text = end_message_font.render("Press ENTER Key to Restart!", True, BLACK)
+	end_message_rect = end_message_text.get_rect(center = (size[0]/2, 725))
+	answer_font = pygame.font.SysFont("arial", 40)
+	answer_text = answer_font.render(f"Answer Word was {answer.upper()}!", True, BLACK)
+	answer_rect = answer_text.get_rect(center = (size[0]/2, 675))
+	screen.blit(answer_text, answer_rect)
+	screen.blit(end_message_text, end_message_rect)
+
+def restart():
+	global answer, total_guess, guess_word, result
+	screen.fill(Darkgray)
+	make_tiles()
+	answer = random.choice(words.WORDS)
+	total_guess = 0
+	guess_word = []
+	result = ""
 
 done = False
+make_tiles()
 
 while not done:
 	if result != "":
-		done = True
-		continue
+		game_end()
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
-				if len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
+				if result != "":
+					restart()
+				elif len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
-						default_y += 90
-						default_x = 80
+						#default_y += 90
+						#default_x = 80
 			elif event.key == pygame.K_BACKSPACE:
 				if len(guess_word_string) > 0:
 					delete_letter()
 			else:
 				key_pressed = event.unicode.upper()
-				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" and key_pressed != "":
+				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" and key_pressed != "" and result == "":
 					if len(guess_word_string) < 5:
 						create_letter()
 	pygame.display.flip()
