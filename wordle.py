@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 import words
+import random
 #Pygame Initailize
 pygame.init()
 
@@ -42,8 +43,10 @@ total_guess = 0
 guess_word = []
 guess_word_string = ""
 
-answer = "final"
-#answer = random.choice()
+#answer = "final"
+#random.seed(5)
+answer = random.choice(words.WORDS)
+
 
 #Var for game_result "Win", "Lose", ""
 result = ""
