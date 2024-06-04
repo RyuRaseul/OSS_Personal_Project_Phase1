@@ -45,6 +45,10 @@ guess_word_string = ""
 answer = "final"
 #answer = random.choice()
 
+#Var for game_result "Win", "Lose", ""
+result = ""
+
+
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
 		self.x = x_pos
@@ -87,19 +91,31 @@ def delete_letter():
 	default_x -= tile_size + tile_spacing_x
 
 def guess_check(guessed_word):
-	global guess_word_string, total_guess
+	global guess_word_string, total_guess, result
+	check_result = True
 	for i in range(5):
 		check_idx = i + 5*total_guess
 		guessed_letter = guessed_word[check_idx].letter.lower()
 		if guessed_letter in answer:
 			if guessed_letter == answer[i]:
 				guessed_word[check_idx].bg_color = GREEN
+				if check_result == True:
+					result = "Win"
 			else:
 				guessed_word[check_idx].bg_color = YELLOW
+				result = ""
+				check_result = False
 		else:
 			guessed_word[check_idx].bg_color = Dimgray
+			result = ""
+			check_result = False
 		guessed_word[check_idx].text_color = WHITE
 		guessed_word[check_idx].draw()
+
+	total_guess += 1
+	guess_word_string = ""
+	if total_guess == 6 and result == "":
+		result = "Lose"
 
 #Creating Rect OBJ for word tile
 for i in range(6):
@@ -110,6 +126,9 @@ for i in range(6):
 done = False
 
 while not done:
+	if result != "":
+		done = True
+		continue
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
@@ -118,9 +137,7 @@ while not done:
 				if len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
 						default_y += 90
-						guess_word_string = ""
 						default_x = 80
-						total_guess += 1
 			elif event.key == pygame.K_BACKSPACE:
 				if len(guess_word_string) > 0:
 					delete_letter()
