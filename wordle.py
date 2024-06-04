@@ -49,9 +49,9 @@ total_guess = 0
 guess_word = []
 guess_word_string = ""
 
-answer = "final"
+#answer = "final"
 #random.seed(5)
-#answer = random.choice(words.WORDS)
+answer = random.choice(words.WORDS)
 
 
 #Var for game_result "Win", "Lose", ""
