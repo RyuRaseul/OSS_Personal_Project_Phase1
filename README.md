@@ -11,7 +11,7 @@
 - HINT 기능을 만들어 HINT 칸을 누르면 무작위하게 한 글자의 정보 제공
 - Daily Mode와 Inf Mode를 제공
 - Daily Mode의 경우 하루에 단 하나의 Word로만 Play가능, 게임이 끝나고 Enter 입력 시  Mode 선택 창으로 되돌아감
-- Inf Mode의 경우 완전 Randomly하게 생성되는 Word로 연습가능한 Mode, 게임이 끝고 Enter 입력 시 새 Inf Mode 시작
+- Inf Mode의 경우 완전 Randomly하게 생성되는 Word로 연습가능한 Mode, 게임이 끝고 Enter 입력 시 새 게임 시작
 ## Reference
 [1] <https://github.com/pygame/pygame> "pygame"
 
