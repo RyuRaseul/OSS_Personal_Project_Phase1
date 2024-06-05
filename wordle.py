@@ -202,10 +202,10 @@ def game_end():
 	pygame.draw.rect(screen, Darkgray, (0, 550, 600, 300))
 	end_message_font = pygame.font.SysFont("arial", 40)
 	end_message_text = end_message_font.render("Press ENTER Key to Restart!", True, BLACK)
-	end_message_rect = end_message_text.get_rect(center = (size[0]/2, 640))
+	end_message_rect = end_message_text.get_rect(center = (size[0]/2, 690))
 	answer_font = pygame.font.SysFont("arial", 40)
 	answer_text = answer_font.render(f"Answer Word was {answer.upper()}!", True, BLACK)
-	answer_rect = answer_text.get_rect(center = (size[0]/2, 690))
+	answer_rect = answer_text.get_rect(center = (size[0]/2, 640))
 	screen.blit(answer_text, answer_rect)
 	screen.blit(end_message_text, end_message_rect)
 
