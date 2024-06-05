@@ -80,7 +80,6 @@ answer = random.choice(words.WORDS)
 #Var for game_result "WIN", "LOSE", "MODE", ""
 result = "MODE"
 mode = ""
-process = ["DAILY", "INF"]
 end = ["WIN", "LOSE"]
 
 class Tile:
