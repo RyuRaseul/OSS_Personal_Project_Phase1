@@ -31,16 +31,27 @@
 
 ### wordle.py
 #### class Tile
-
+ i. def __init__ : 화면 상단부의 Word Tile 객체를 생성하는 함수
+ ii. def draw : Word Tile을 screen에 나타내주는 함수
 #### class Letter
-
+ i. def __init__ : 사용자가 입력한 Text 객체를 생성하는 함수
+ ii. def draw : Text 객체를 screen에 나타내주는 함수
+ iii. def delete : Text 객체를 덮어씌워 screen에서 없애주는 함수
 #### class Keyboard
-
+ i. def __init__ : 화면 아래의 Keyboard 부분의 각 Key를 생성하는 함수
+ ii. def draw : Keyboard 객체를 그려주는 함수
 #### def create\_letter()
-
+ Player가 입력한 값을, 몇 번째 Letter인지, 몇 번쨰 추측인지를 고려하여 화면에 나타내주는 함수
 #### def delete\_letter()
-
+ Player가 Backspace를 누르면 해당 Letter를 지워주는 함수
 #### def guess\_check(guessed\_word)
-
-####  
-
+ Player가 입력한 5글자 Word를 확인하고 Word Tile 및 Keyboard에 회색, 노란색, 초록색으로 표시해주는 함수
+ 또한, Player의 추측이 맞았을 경우 게임을 끝낼 수 있도록 result 값을 결정해준다.
+#### def make\_tiles()
+ 게임 시작시 모든 Word Tile을 생성하고 그려주는 함수
+#### def game\_end()
+ Player이 추측이 맞았거나, 추측을 6회할 경우 화면에 게임이 끝났다는 message를 표시해주는 함수
+#### def restart()  
+ 게임이 끝난 후, Enter key를 눌러 게임을 재시작할 때, 변수 초기화 및 새로 Game screen을 생성해주는 함수
+#### def Hint()
+ Hint를 클릭했을 때, Keyboard 부분의 Hint\_letter의 정보를 표시해주는 함수
