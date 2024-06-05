@@ -290,7 +290,7 @@ def check_keyboard_click(mouse_x, key_line):
 		mouse_x -= 102
 		for i in range(len(keyboard_keys[2])):
 			if 58*i <= mouse_x <= 58*i + 48:
-				clicked_letter = keys[i + len(keyboard_keys[1])]
+				clicked_letter = keys[i + len(keyboard_keys[1]) + len(keyboard_keys[0])]
 				create_letter(clicked_letter.key)
 		
 done = False
