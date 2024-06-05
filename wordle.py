@@ -5,8 +5,10 @@ import random
 #Pygame Initailize
 pygame.init()
 
-#Screen Setting
-size = [600, 900]
+#Screen Settingi
+screen_x = 600
+screen_y = 800
+size = [screen_x, screen_y]
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Wordle")
 
@@ -24,17 +26,17 @@ Darkgray = (169, 169, 169)
 screen.fill(Darkgray)	
 
 #Var for word_tile
-default_x = 80
+default_x = 105
 default_y = 70
-tile_size = 80
 tile_spacing_x = 10
 tile_spacing_y = 10
+tile_size = 70
 
 #Var for input_letter
 #current_x_pos = 120
 #current_y_pos = 70
 key_pressed = ""
-letter_font = pygame.font.SysFont("arial", 70, True, False)
+letter_font = pygame.font.SysFont("arial", 60, True, False)
 key_font = pygame.font.SysFont("arial", 40, True, False)
 #letter_size = 75
 
@@ -42,7 +44,7 @@ key_font = pygame.font.SysFont("arial", 40, True, False)
 keyboard_keys = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 keys = []
 keyboard_x = 15
-keyboard_y = 630
+keyboard_y = 550
 
 #Var for guessing word
 total_guess = 0
@@ -85,7 +87,7 @@ class Letter:
 		self.y = y_pos
 		self.letter = letter
 		self.text_surface = letter_font.render(self.letter, True, self.text_color)
-		self.text_rect = self.text_surface.get_rect(center=(x_pos + 40, y_pos + 40))
+		self.text_rect = self.text_surface.get_rect(center=(x_pos + tile_size//2, y_pos + tile_size//2))
 	def draw(self):
 		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, tile_size, tile_size])
 		pygame.draw.rect(screen, BLACK, [self.x, self.y, tile_size, tile_size], 4)
@@ -185,7 +187,7 @@ for i in range(3):
 		keys.append(new_key)
 		new_key.draw()	
 		keyboard_x += 58
-	keyboard_y += 90
+	keyboard_y += 85
 	if i == 0:
 		keyboard_x = 44
 	elif i == 1:
