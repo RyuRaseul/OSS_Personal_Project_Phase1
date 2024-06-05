@@ -34,12 +34,9 @@ tile_spacing_y = 10
 tile_size = 70
 
 #Var for input_letter
-#current_x_pos = 120
-#current_y_pos = 70
 key_pressed = ""
 letter_font = pygame.font.SysFont("arial", 60, True, False)
 key_font = pygame.font.SysFont("arial", 40, True, False)
-#letter_size = 75
 
 #Keyboard List
 keyboard_keys = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
@@ -72,8 +69,6 @@ USED_LIST = ""
 UNUSED_LIST = ""
 UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
 
-#answer = "final"
-#random.seed(5)
 answer = random.choice(words.WORDS)
 
 
@@ -299,7 +294,6 @@ def check_keyboard_click(mouse_x, key_line):
 				create_letter(clicked_letter.key)
 		
 done = False
-#make_tiles()
 
 while not done:
 	if result == "MODE":
@@ -318,8 +312,6 @@ while not done:
 						result = "MODE"
 				elif len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
-						#default_y += 90
-						#default_x = 800
 			elif event.key == pygame.K_BACKSPACE:
 				if len(guess_word_string) > 0:
 					delete_letter()
