@@ -21,3 +21,26 @@
 | Linux | :o: |
 | MacOS | :x: |
 ### 실행 방법
+#### Windows
+1. python3.12를 설치한다.
+2. swig을 설치한다.
+
+## 실행 예시
+
+## 코드 설명
+
+### wordle.py
+#### class Tile
+
+#### class Letter
+
+#### class Keyboard
+
+#### def create\_letter()
+
+#### def delete\_letter()
+
+#### def guess\_check(guessed\_word)
+
+####  
+
