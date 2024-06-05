@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 import words
 import random
+import datetime
 #Pygame Initailize
 pygame.init()
 
@@ -56,6 +57,16 @@ hint_x = 460
 hint_y = 20
 hint_count = 5
 hint_font = pygame.font.SysFont("arial", 25)
+
+#Var for Mode Selection
+mode_font = pygame.font.SysFont("arial", 40)
+daily_text = mode_font.render("Daily MODE", True, 40)
+daily_rect = daily_text.get_rect(center = (300, 250))
+inf_text = mode_font.render("INF Mode", True, 40)
+inf_rect = inf_text.get_rect(center = (300, 450))
+daily_seed = datetime.datetime.today().strftime("%Y:%m:%d")
+
+
 #Var for distinguish USED(YELLOW, GREEN), UNUSED(GRAY), UNKNOWN(WHITE)
 USED_LIST = ""
 UNUSED_LIST = ""
@@ -66,9 +77,11 @@ UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
 answer = random.choice(words.WORDS)
 
 
-#Var for game_result "Win", "Lose", ""
-result = ""
-
+#Var for game_result "WIN", "LOSE", "MODE", ""
+result = "MODE"
+mode = ""
+process = ["DAILY", "INF"]
+end = ["WIN", "LOSE"]
 
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
@@ -143,7 +156,7 @@ def guess_check(guessed_word):
 						letter.bg_color = GREEN
 						letter.draw()
 				if check_result == True:
-					result = "Win"
+					result = "WIN"
 			else:
 				guessed_word[check_idx].bg_color = YELLOW
 				if guessed_letter.upper() not in USED_LIST:
@@ -169,11 +182,11 @@ def guess_check(guessed_word):
 			check_result = False
 		guessed_word[check_idx].text_color = WHITE
 		guessed_word[check_idx].draw()
-
+	
 	total_guess += 1
 	guess_word_string = ""
 	if total_guess == 6 and result == "":
-		result = "Lose"
+		result = "LOSE"
 
 #Creating Rect OBJ for word tile
 def make_tiles():
@@ -210,14 +223,20 @@ def game_end():
 	screen.blit(answer_text, answer_rect)
 	screen.blit(end_message_text, end_message_rect)
 
-def restart():
-	global answer, total_guess, guess_word, result, hint_text, hint_rect, hint_count, USED_LIST, UNUSED_LIST, UNKNOWN_LIST
+def game_start():
+	# mode == 1 daily and mode == 0 inf
+	global answer, total_guess, guess_word, result, mode, hint_text, hint_rect, hint_count, USED_LIST, UNUSED_LIST, UNKNOWN_LIST
 	screen.fill(Darkgray)
 	make_tiles()
-	answer = random.choice(words.WORDS)
 	total_guess = 0
 	guess_word = []
 	result = ""
+	if mode == "DAILY":
+		random.seed(daily_seed)
+		answer = random.choice(words.WORDS)
+	else:
+		random.seed()
+		answer = random.choice(words.WORDS)
 	USED_LIST = ""
 	UNUSED_LIST = ""
 	UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
@@ -227,8 +246,6 @@ def restart():
 	hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
 	hint_rect = hint_text.get_rect(center = (510, 35))
 	screen.blit(hint_text, hint_rect)
-
-
 	for key_tile in keys:
 		key_tile.bg_color = WHITE
 		key_tile.draw()
@@ -256,13 +273,20 @@ def Hint():
 	hint_rect = hint_text.get_rect(center = (510, 35))
 	screen.blit(hint_text, hint_rect)
 
-
+def Mode_Select():
+	screen.fill(WHITE)
+	pygame.draw.rect(screen, BLACK, (150, 200, 300, 100), 4)
+	pygame.draw.rect(screen, BLACK, (150, 400, 300, 100), 4)
+	screen.blit(daily_text, daily_rect)
+	screen.blit(inf_text, inf_rect)
 
 done = False
-make_tiles()
+#make_tiles()
 
 while not done:
-	if result != "":
+	if result == "MODE":
+		Mode_Select()
+	elif result in end:
 		game_end()
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -270,11 +294,14 @@ while not done:
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_RETURN:
 				if result != "":
-					restart()
+					if mode == "INF":
+						game_start()
+					else:
+						result = "MODE"
 				elif len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
 						#default_y += 90
-						#default_x = 80
+						#default_x = 800
 			elif event.key == pygame.K_BACKSPACE:
 				if len(guess_word_string) > 0:
 					delete_letter()
@@ -285,11 +312,18 @@ while not done:
 						create_letter()
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
-			if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55) and result == "":
+			if result == "MODE":
+				if (150 <= mouse_pos[0] <= 450):
+					if (200 <= mouse_pos[1] <= 300):
+						mode = "DAILY"
+						game_start()								
+					elif (400 <= mouse_pos[1] <=500):
+						mode = "INF"
+						game_start()
+			elif hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55) and result == "":
 				hint_count -= 1
 				Hint()
 	pygame.display.flip()
-
 
 
 #Quit Code

@@ -23,8 +23,22 @@
 ### 실행 방법
 #### Windows
 1. python3.12를 설치한다.
-2. swig을 설치한다.
+2. Microsoft Visual c++ Build Tools 설치
+```
+1. https://visualstudio.microsoft.com/ko/visual-cpp-build-tools/ 에서   Build Tools 다운로드 후 실행
 
+2. Visual Studio Installer가 실행 된 경우 해당 버전의 "수정(Modify)" 클릭
+
+3. Desktop & Mobile 에서 c++ build Tools 체크 표시 이후 설치
+
+4. 시스템 재부팅
+```
+3. powershell 창에서 pygame을 설치
+```
+pip install pygame
+```
+4. 재부팅 이후 python wordle.py 실행하면 게임 창이 뜨면서 게임을 할 수 있다.
+#### Linux
 ## 실행 예시
 
 ## 코드 설명
