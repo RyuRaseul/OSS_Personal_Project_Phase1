@@ -223,7 +223,6 @@ def game_end():
 	screen.blit(end_message_text, end_message_rect)
 
 def game_start():
-	# mode == 1 daily and mode == 0 inf
 	global answer, total_guess, guess_word, result, mode, hint_text, hint_rect, hint_count, USED_LIST, UNUSED_LIST, UNKNOWN_LIST
 	screen.fill(Darkgray)
 	make_tiles()
