@@ -18,11 +18,11 @@
 [2] <https://github.com/baraltech/Wordle-PyGame> "Wordle-pygame"
 ## 지원 OS 및 실행 방법
 ### 지원 OS
-|OS| 지원 여부|
-|-----|-------|
-|Windows| :o: |
-| Linux | :o: |
-| MacOS | :x: |
+|OS| 지원 여부          |
+|-----|-----------------|
+|Windows| :o:           |
+| Linux | :o:           |
+| MacOS | :x:(확인필요) |
 ### 실행 방법
 #### Windows
 1. python3.12를 설치한다.
