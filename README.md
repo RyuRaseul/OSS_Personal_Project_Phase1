@@ -99,4 +99,6 @@ python3 wordle.py
 ## words.py
  Player가 입력한 Word가 유효한지 확인할 수 있는 List가 담겨진 파일
 # ToDo List
-
+ * Score 기능 추가
+ * Easy, Hard Mode 추가
+ * INF Mode에서 실패 없이 연속 몇 문제 맞췄는지 알려주는 Message 구현
