@@ -60,3 +60,6 @@
  게임이 끝난 후, Enter key를 눌러 게임을 재시작할 때, 변수 초기화 및 새로 Game screen을 생성해주는 함수
 #### def Hint()
  Hint를 클릭했을 때, Keyboard 부분의 Hint\_letter의 정보를 표시해주는 함수
+
+### words.py
+ Player가 입력한 Word가 유효한지 확인할 수 있는 List가 담겨진 파일
