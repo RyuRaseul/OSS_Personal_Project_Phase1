@@ -42,7 +42,6 @@ pip install pygame
 ```
 4. 재부팅 이후 python wordle.py 실행하면 게임 창이 뜨면서 게임을 할 수 있다.
 ### Linux
-# 실행 예시
 1. python3 설치
 ```
 1. sudo apt-get install python3
@@ -55,6 +54,8 @@ pip install pygame
 ```
 python3 wordle.py
 ```
+# 실행 예시
+![Wordle-_Ubuntu_-2024-06-05-21-39-36](https://github.com/RyuRaseul/OSS_Personal_Project_Phase1/assets/113527604/a2ab2988-1ca0-4846-810a-83b277a5ad4d)
 # 코드 설명
 
 ## wordle.py
