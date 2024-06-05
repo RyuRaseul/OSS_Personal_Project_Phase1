@@ -151,8 +151,9 @@ def guess_check(guessed_word):
 					UNKNOWN_LIST = UNKNOWN_LIST.replace(guessed_letter.upper(), '')
 				for letter in keys:
 					if letter.key == guessed_letter.upper():
-						letter.bg_color = YELLOW
-						letter.draw()
+						if letter.bg_color == Dimgray or letter.bg_color == WHITE:
+							letter.bg_color = YELLOW
+							letter.draw()
 				result = ""
 				check_result = False
 		else:
