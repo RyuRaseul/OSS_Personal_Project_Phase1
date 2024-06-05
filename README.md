@@ -9,7 +9,9 @@
 - 키보드 입력을 통한 단어 추측
 - 단어 추측시 색깔을 통해 정보 제공
 - HINT 기능을 만들어 HINT 칸을 누르면 무작위하게 한 글자의 정보 제공
-
+- Daily Mode와 Inf Mode를 제공
+- Daily Mode의 경우 하루에 단 하나의 Word로만 Play가능, 게임이 끝나고 Enter 입력 시  Mode 선택 창으로 되돌아감
+- Inf Mode의 경우 완전 Randomly하게 생성되는 Word로 연습가능한 Mode, 게임이 끝고 Enter 입력 시 새 Inf Mode 시작
 ## Reference
 [1] <https://github.com/pygame/pygame> "pygame"
 [2] <https://github.com/baraltech/Wordle-PyGame> "Wordle-pygame"
@@ -63,7 +65,7 @@ pip install pygame
 #### def delete\_letter()
  Player가 Backspace를 누르면 해당 Letter를 지워주는 함수
 #### def guess\_check(guessed\_word)
- Player가 입력한 5글자 Word를 확인하고 Word Tile 및 Keyboard에 회색, 노란색, 초록색으로 표시해주는 함수
+ Player가 입력한 5글자 Word(guessed\_word)를 확인하고 Word Tile 및 Keyboard에 회색, 노란색, 초록색으로 표시해주는 함수
 
  또한, Player의 추측이 맞았을 경우 게임을 끝낼 수 있도록 result 값을 결정해준다.
 #### def make\_tiles()
