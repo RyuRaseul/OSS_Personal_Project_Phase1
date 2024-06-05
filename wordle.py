@@ -208,7 +208,7 @@ def game_end():
 	screen.blit(end_message_text, end_message_rect)
 
 def restart():
-	global answer, total_guess, guess_word, result, hint_text, hint_rect
+	global answer, total_guess, guess_word, result, hint_text, hint_rect, hint_count, USED_LIST, UNUSED_LIST, UNKNOWN_LIST
 	screen.fill(Darkgray)
 	make_tiles()
 	answer = random.choice(words.WORDS)
@@ -218,6 +218,7 @@ def restart():
 	USED_LIST = ""
 	UNUSED_LIST = ""
 	UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
+	hint_count = 5
 	pygame.draw.rect(screen, Darkgray, (hint_x, hint_y, 100, 35))
 	pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
 	hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
@@ -281,8 +282,8 @@ while not done:
 						create_letter()
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
-			if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
-				hint_count -= 1	
+			if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55) and result == "":
+				hint_count -= 1
 				Hint()
 	pygame.display.flip()
 
