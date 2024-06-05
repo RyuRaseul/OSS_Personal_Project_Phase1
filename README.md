@@ -14,6 +14,7 @@
 - Inf Mode의 경우 완전 Randomly하게 생성되는 Word로 연습가능한 Mode, 게임이 끝고 Enter 입력 시 새 Inf Mode 시작
 ## Reference
 [1] <https://github.com/pygame/pygame> "pygame"
+
 [2] <https://github.com/baraltech/Wordle-PyGame> "Wordle-pygame"
 ## 지원 OS 및 실행 방법
 ### 지원 OS
@@ -42,7 +43,18 @@ pip install pygame
 4. 재부팅 이후 python wordle.py 실행하면 게임 창이 뜨면서 게임을 할 수 있다.
 #### Linux
 ## 실행 예시
-
+1. python3 설치
+```
+1. sudo apt-get install python3
+```
+2. pygame 설치
+```
+1. pip install pygame
+```
+3. 리포지토리 내부에서 wordle.py 실행
+```
+python3 wordle.py
+```
 ## 코드 설명
 
 ### wordle.py
