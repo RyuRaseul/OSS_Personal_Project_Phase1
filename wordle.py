@@ -121,14 +121,14 @@ class Keyboard:
 		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
 		screen.blit(self.key_surface, self.key_rect)
 
-def create_letter():
+def create_letter(input_key):
 	global default_x, guess_word_string
 	create_x_idx = len(guess_word)%5
 	create_y_idx = len(guess_word)//5
-	new_letter = Letter(key_pressed, default_x + create_x_idx*(tile_spacing_x + tile_size), default_y + create_y_idx*(tile_spacing_y + tile_size))
+	new_letter = Letter(input_key, default_x + create_x_idx*(tile_spacing_x + tile_size), default_y + create_y_idx*(tile_spacing_y + tile_size))
 	new_letter.draw()
 	#default_x += tile_size + tile_spacing_x
-	guess_word_string += key_pressed
+	guess_word_string += input_key
 	guess_word.append(new_letter)
 
 def delete_letter():
@@ -279,6 +279,26 @@ def Mode_Select():
 	screen.blit(daily_text, daily_rect)
 	screen.blit(inf_text, inf_rect)
 
+def check_keyboard_click(mouse_x, key_line):
+	if key_line == 0:
+		mouse_x -= 15
+		for i in range(len(keyboard_keys[0])):
+			if 58*i <= mouse_x <= 58*i + 48:
+				clicked_letter = keys[i]		  			
+				create_letter(clicked_letter.key)
+	elif key_line == 1:
+		mouse_x -=44
+		for i in range(len(keyboard_keys[1])):
+			if 58*i <= mouse_x <= 58*i + 48:
+				clicked_letter = keys[i + len(keyboard_keys[0])]
+				create_letter(clicked_letter.key)
+	else:
+		mouse_x -= 102
+		for i in range(len(keyboard_keys[2])):
+			if 58*i <= mouse_x <= 58*i + 48:
+				clicked_letter = keys[i + len(keyboard_keys[1])]
+				create_letter(clicked_letter.key)
+		
 done = False
 #make_tiles()
 
@@ -308,7 +328,7 @@ while not done:
 				key_pressed = event.unicode.upper()
 				if key_pressed in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" and key_pressed != "" and result == "":
 					if len(guess_word_string) < 5:
-						create_letter()
+						create_letter(key_pressed)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
 			if result == "MODE":
@@ -319,9 +339,17 @@ while not done:
 					elif (400 <= mouse_pos[1] <=500):
 						mode = "INF"
 						game_start()
-			elif hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55) and result == "":
-				hint_count -= 1
-				Hint()
+			elif result == "":
+				if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
+					hint_count -= 1
+					Hint()
+				elif len(guess_word_string) < 5: 
+					if (15 <= mouse_pos[0] <= 585) and (550 <= mouse_pos[1] <= 620):
+						check_keyboard_click(mouse_pos[0], 0)	
+					elif (44 <= mouse_pos[0] <= 556) and (635 <= mouse_pos[1] <= 705):
+						check_keyboard_click(mouse_pos[0], 1)	
+					elif (102 <= mouse_pos[0] <= 498) and (720 <= mouse_pos[1] <= 790):	
+						check_keyboard_click(mouse_pos[0], 2)	
 	pygame.display.flip()
 
 
