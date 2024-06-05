@@ -12,7 +12,7 @@
 
 ## Reference
 [1] <https://github.com/pygame/pygame> "pygame"
-
+[2] <https://github.com/baraltech/Wordle-PyGame> "Wordle-pygame"
 ## 지원 OS 및 실행 방법
 ### 지원 OS
 |OS| 지원 여부|
@@ -68,12 +68,18 @@ pip install pygame
  또한, Player의 추측이 맞았을 경우 게임을 끝낼 수 있도록 result 값을 결정해준다.
 #### def make\_tiles()
  게임 시작시 모든 Word Tile을 생성하고 그려주는 함수
+#### def Mode\_Select()
+ Mode 선택 창을 생성하는 함수
 #### def game\_end()
  Player이 추측이 맞았거나, 추측을 6회할 경우 화면에 게임이 끝났다는 message를 표시해주는 함수
-#### def restart()  
+#### def game\_start()  
  게임이 끝난 후, Enter key를 눌러 게임을 재시작할 때, 변수 초기화 및 새로 Game screen을 생성해주는 함수
+ 이때 선택한 Mode에 따라서 Random하게 생성하는 단어가 달라진다. 
+ Daily Mode의 경우 오늘의 날짜를 seed로 사용해 하루 내에는 항상 같은 Word만 생성한다.
+ INF Mode의 경우 완전 Randomly하게 Word를 생성한다.
 #### def Hint()
  Hint를 클릭했을 때, Keyboard 부분의 Hint\_letter의 정보를 표시해주는 함수
-
+#### def check\_keyboard\_click()
+ Keyboard 부분의 Click한 Letter을 입력해주는 함수
 ### words.py
  Player가 입력한 Word가 유효한지 확인할 수 있는 List가 담겨진 파일
