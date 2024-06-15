@@ -383,18 +383,19 @@ def Mode_Select():
 #############################################
 ################## PHASE 2 ##################
 #############################################
+print(answer)
 def Weekly_Attendance():
 	global attendance_data
 
-	
 	header_font = pygame.font.SysFont("arial", 40)
 	header_text = header_font.render("WEEKLY ATTENDANCE", True, BLACK)
 	header_rect = header_text.get_rect(center=(screen_x // 2, 130))
 	screen.blit(header_text, header_rect)
 
 	day_lables = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
-	day_font = pygame.font.SysFont("arial", 30)
+	day_font = pygame.font.SysFont("arial", 20)
 	attendance = attendance_data["attendance"]
+
 	for i in range(7):
 		pygame.draw.rect(screen, BLACK, (75 + 70*i, 200, 50, 50), 2)
 		weekday_text = day_font.render(day_lables[i], True, BLACK)
@@ -408,11 +409,24 @@ def Weekly_Attendance():
 			screen.blit(cross_icon, (75 + 70 * i, 200))
 		else:
 			screen.blit(crown_icon, (75 + 70 * i, 200))
-	streak_font = pygame.font.SysFont("arial", 30)
-	streak_text = streak_font.render(f"{solved_days} days of solving!", True, BLACK)
-	streak_rect = streak_text.get_rect(center=(screen_x // 2, 350))
-	screen.blit(streak_text, streak_rect)
-	screen.blit(fire_icon, (streak_rect.right + 10, streak_rect.top - 10))
+	solved_font = pygame.font.SysFont("arial", 30)
+	solved_text = solved_font.render(f"{solved_days} days of solving!!!", True, BLACK)
+	solved_rect = solved_text.get_rect(center=(screen_x // 2, 320))
+	screen.blit(solved_text, solved_rect)
+	screen.blit(fire_icon, (solved_rect.right + 10, solved_rect.top - 10))
+	screen.blit(fire_icon, (solved_rect.left - 70, solved_rect.top - 10))
+	daily_rect = daily_text.get_rect(center = (300, 520))
+	inf_rect = inf_text.get_rect(center = (300, 620))
+
+	try_font = pygame.font.SysFont("arial", 40, bold=True)
+	try_text = try_font.render("START GAME?", True, BLACK)
+	try_rect = try_text.get_rect(center = (300, 420))
+	screen.blit(try_text, try_rect)
+	pygame.draw.rect(screen, BLACK, (150, 480, 300, 80), 4)
+	pygame.draw.rect(screen, BLACK, (150, 580, 300, 80), 4)
+	screen.blit(daily_text, daily_rect)
+	screen.blit(inf_text, inf_rect)
+
 #############################################
 ################## PHASE 2 ##################
 #############################################		
@@ -447,7 +461,7 @@ while not done:
 	#############################################
 	################## PHASE 2 ##################
 	if mode == "WEEKLY":
-		screen.fill(Lightblue)
+		screen.fill(WHITE)
 		Weekly_Attendance()
 	elif result == "MODE":
 		screen.fill(WHITE)
@@ -469,6 +483,7 @@ while not done:
 						game_start()
 					else:
 						result = "MODE"
+						mode = ""
 				elif len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
 			elif event.key == pygame.K_BACKSPACE:
@@ -481,14 +496,14 @@ while not done:
 						create_letter(key_pressed)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
-			if result == "MODE":
+			if result == "MODE" and mode == "":
 					#############################################
 					################## PHASE 2 ##################
 					#############################################
 				if (100 <= mouse_pos[0] <= 500) and (600 <= mouse_pos[1] <= 700):
 					mode = "WEEKLY"
 				elif mode != "WEEKLY" and (150 <= mouse_pos[0] <= 450):
-					#############################################
+					#######################x######################
 					################## PHASE 2 ##################
 					#############################################
 					if (200 <= mouse_pos[1] <= 300):
@@ -497,6 +512,13 @@ while not done:
 					elif (400 <= mouse_pos[1] <=500):
 						mode = "INF"
 						game_start()
+			elif result == "MODE" and mode == "WEEKLY":
+				if (150 <= mouse_pos[0] <= 450) and (480 <= mouse_pos[1] <= 560):
+					mode = "DAILY"
+					game_start()
+				elif (150 <= mouse_pos[0] <= 450) and (580 <= mouse_pos[1] <= 660):
+					mode = "INF"
+					game_start()
 
 					
 			elif result == "":
