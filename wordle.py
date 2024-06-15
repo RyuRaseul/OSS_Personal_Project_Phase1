@@ -560,7 +560,16 @@ while not done:
 					elif (44 <= mouse_pos[0] <= 556) and (635 <= mouse_pos[1] <= 705):
 						check_keyboard_click(mouse_pos[0], 1)	
 					elif (102 <= mouse_pos[0] <= 498) and (720 <= mouse_pos[1] <= 790):	
-						check_keyboard_click(mouse_pos[0], 2)	
+						check_keyboard_click(mouse_pos[0], 2)
+				#############################################
+				################## PHASE 2 ##################
+				elif len(guess_word_string) == 5:
+					if (15 <= mouse_pos[0] <= 90) and guess_word_string.lower() in words.WORDS:
+						guess_check(guess_word)
+				if (508 <= mouse_pos[0] <= 585) and (720 <= mouse_pos[1] <= 790):
+					delete_letter()
+				################## PHASE 2 ##################
+				#############################################
 	pygame.display.flip()
 
 
