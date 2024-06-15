@@ -292,7 +292,6 @@ def write_attendance(data):
 def reset_attendance(data, current_weekday):
 	current_date = datetime.datetime.today().strftime("%Y-%m-%d")
 	if current_weekday == 0 and data["last_date"] != current_date:
-		print("Reset Attendance")
 		data = {"last_date": "", "attendance": [False] * 7}
 		return data
 	return False
@@ -316,7 +315,6 @@ attendance_data = check_attendance()
 #문제 맞혔으면 업데이트 
 def update_attendance():
 	global attendance_data, solved_days
-	print("Update Attendance")
 	attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
 	write_attendance(attendance_data)
 	solved_days = calculate_solved(attendance_data)
@@ -412,7 +410,6 @@ def Mode_Select():
 #############################################
 ################## PHASE 2 ##################
 #############################################
-print(answer)
 def Weekly_Attendance():
 	global attendance_data
 
