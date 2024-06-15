@@ -411,47 +411,56 @@ def Mode_Select():
 ################## PHASE 2 ##################
 #############################################
 def Weekly_Attendance():
-	global attendance_data
+    global attendance_data
 
-	header_font = pygame.font.SysFont("arial", 40)
-	header_text = header_font.render("WEEKLY ATTENDANCE", True, BLACK)
-	header_rect = header_text.get_rect(center=(screen_x // 2, 130))
-	screen.blit(header_text, header_rect)
+    def draw_text(text, font, color, center):
+        rendered_text = font.render(text, True, color)
+        text_rect = rendered_text.get_rect(center=center)
+        screen.blit(rendered_text, text_rect)
 
-	day_lables = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
-	day_font = pygame.font.SysFont("arial", 20)
-	attendance = attendance_data["attendance"]
+    def draw_icon(icon, x, y):
+        screen.blit(icon, (x, y))
 
-	for i in range(7):
-		pygame.draw.rect(screen, BLACK, (75 + 70*i, 200, 50, 50), 2)
-		weekday_text = day_font.render(day_lables[i], True, BLACK)
-		weekday_rect = weekday_text.get_rect(center = (100 + 70*i, 270))
-		screen.blit(weekday_text, weekday_rect)
-	
-	for i in range(7):
-		if attendance[i] == True:
-			screen.blit(check_icon, (75 + 70 * i, 200))
-		elif attendance[i] == False:
-			screen.blit(cross_icon, (75 + 70 * i, 200))
-		else:
-			screen.blit(crown_icon, (75 + 70 * i, 200))
-	solved_font = pygame.font.SysFont("arial", 30)
-	solved_text = solved_font.render(f"{solved_days} days of solving!!!", True, BLACK)
-	solved_rect = solved_text.get_rect(center=(screen_x // 2, 320))
-	screen.blit(solved_text, solved_rect)
-	screen.blit(fire_icon, (solved_rect.right + 10, solved_rect.top - 10))
-	screen.blit(fire_icon, (solved_rect.left - 70, solved_rect.top - 10))
-	daily_rect = daily_text.get_rect(center = (300, 520))
-	inf_rect = inf_text.get_rect(center = (300, 620))
+    def draw_rectangle(color, x, y, width, height, thickness):
+        pygame.draw.rect(screen, color, (x, y, width, height), thickness)
 
-	try_font = pygame.font.SysFont("arial", 40, bold=True)
-	try_text = try_font.render("START GAME?", True, BLACK)
-	try_rect = try_text.get_rect(center = (300, 420))
-	screen.blit(try_text, try_rect)
-	pygame.draw.rect(screen, BLACK, (150, 480, 300, 80), 4)
-	pygame.draw.rect(screen, BLACK, (150, 580, 300, 80), 4)
-	screen.blit(daily_text, daily_rect)
-	screen.blit(inf_text, inf_rect)
+    header_font = pygame.font.SysFont("arial", 40)
+    day_font = pygame.font.SysFont("arial", 20)
+    solved_font = pygame.font.SysFont("arial", 30)
+    try_font = pygame.font.SysFont("arial", 40, bold=True)
+
+    #헤더 텍스트 그리기 
+    draw_text("WEEKLY ATTENDANCE", header_font, BLACK, (screen_x // 2, 130))
+
+    day_labels = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    attendance = attendance_data["attendance"]
+
+    # 라벨, 체크 아이콘, 엑스 아이콘, 왕관 아이콘 그리기
+    for i in range(7):
+        x_pos = 75 + 70 * i
+        draw_rectangle(BLACK, x_pos, 200, 50, 50, 2)
+        draw_text(day_labels[i], day_font, BLACK, (x_pos + 25, 270))
+        if attendance[i] == True:
+            draw_icon(check_icon, x_pos, 200)
+        elif attendance[i] == False:
+            draw_icon(cross_icon, x_pos, 200)
+        else:
+            draw_icon(crown_icon, x_pos, 200)
+
+    # 푼 문제 수 그리기
+    draw_text(f"{solved_days} days of solving!!!", solved_font, BLACK, (screen_x // 2, 320))
+    solved_rect = solved_font.render(f"{solved_days} days of solving!!!", True, BLACK).get_rect(center=(screen_x // 2, 320))
+    screen.blit(fire_icon, (solved_rect.right + 10, solved_rect.top - 10))
+    screen.blit(fire_icon, (solved_rect.left - 70, solved_rect.top - 10))
+
+    draw_text("START GAME?", try_font, BLACK, (300, 420))
+
+    # 버튼 그리기
+    draw_rectangle(BLACK, 150, 480, 300, 80, 4)
+    draw_rectangle(BLACK, 150, 580, 300, 80, 4)
+    screen.blit(daily_text, daily_text.get_rect(center=(300, 520)))
+    screen.blit(inf_text, inf_text.get_rect(center=(300, 620)))
+
 
 #############################################
 ################## PHASE 2 ##################
