@@ -236,6 +236,15 @@ for i in range(3):
 #############################################
 ################## PHASE 2 ##################
 #############################################
+solved_days = 0
+
+#문제 맞힌 총 일수 계산
+def calculate_solved(attendance):
+	solved = 0
+	for state in attendance["attendance"]:
+		if state == "WIN":
+			solved += 1
+	return solved
 
 def initialize_attendance():
     if os.path.exists(attendance_file):
@@ -261,6 +270,7 @@ def reset_attendance(data, current_weekday):
 
 #오늘 출석 체크
 def check_attendance():
+	global solved_days
 	current_weekday = datetime.datetime.today().weekday()
 	data = initialize_attendance()
 	data = reset_attendance(data, current_weekday) or data
@@ -269,15 +279,19 @@ def check_attendance():
 		current_date = datetime.datetime.today().strftime("%Y-%m-%d")
 		data["last_date"] = current_date
 	write_attendance(data)
+	solved_days = calculate_solved(data)
 	return data
 
 attendance_data = check_attendance()
 
 #문제 맞혔으면 업데이트 
 def update_attendance():
-		print("Update Attendance")
-		attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
-		write_attendance(attendance_data)
+	global attendance_data, solved_days
+	print("Update Attendance")
+	attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
+	write_attendance(attendance_data)
+	solved_days = calculate_solved(attendance_data)
+
 
 check_attendance()
 #############################################
@@ -395,7 +409,7 @@ def Weekly_Attendance():
 		else:
 			screen.blit(crown_icon, (75 + 70 * i, 200))
 	streak_font = pygame.font.SysFont("arial", 30)
-	streak_text = streak_font.render(f"{solved} days of solving!", True, BLACK)
+	streak_text = streak_font.render(f"{solved_days} days of solving!", True, BLACK)
 	streak_rect = streak_text.get_rect(center=(screen_x // 2, 150))
 	screen.blit(streak_text, streak_rect)
 	screen.blit(fire_icon, (streak_rect.right + 10, streak_rect.top - 10))
