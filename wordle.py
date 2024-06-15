@@ -222,6 +222,10 @@ for i in range(3):
 	elif i == 1:
 		keyboard_x = 102
 
+#############################################
+################## PHASE 2 ##################
+#############################################
+
 def initialize_attendance():
     if os.path.exists(attendance_file):
         with open(attendance_file, 'r') as file:
@@ -235,13 +239,41 @@ def write_attendance(data):
     with open(attendance_file, 'w') as file:
         json.dump(data, file)
 
-def reset_attendance():
-	current_weekday = datetime.datetime.today().weekday()
+#월요일에 출석 초기화
+def reset_attendance(data, current_weekday):
 	current_date = datetime.datetime.today().strftime("%Y-%m-%d")
 	if current_weekday == 0 and data["last_date"] != current_date:
+		print("Reset Attendance")
 		data = {"last_date": "", "attendance": [False] * 7}
-		write_attendance(data)
+		return data
+	return False
 
+#오늘 출석 체크
+def check_attendance():
+	current_weekday = datetime.datetime.today().weekday()
+	data = initialize_attendance()
+	data = reset_attendance(data, current_weekday) or data
+	if data["attendance"][current_weekday] == False:
+		data["attendance"][current_weekday] = True
+		current_date = datetime.datetime.today().strftime("%Y-%m-%d")
+		data["last_date"] = current_date
+	write_attendance(data)
+	return data
+
+attendance_data = check_attendance()
+
+#문제 맞혔으면 업데이트 
+def update_attendance():
+		print("Update Attendance")
+		attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
+		write_attendance(attendance_data)
+		print(attendance_data)
+
+print(check_attendance())
+
+#############################################
+################## PHASE 2 ##################
+#############################################
 
 pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
 hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
@@ -357,12 +389,21 @@ def check_keyboard_click(mouse_x, key_line):
 				create_letter(clicked_letter.key)
 		
 done = False
-
+## PHASE 2
+game_win = False
 while not done:
 	if result == "MODE":
 		Mode_Select()
 	elif result in end:
+		#############################################
+		################## PHASE 2 ##################
+		if result == "WIN" and game_win == False:
+			update_attendance()
+			game_win = True
 		game_end()
+		
+		################## PHASE 2 ##################
+		#############################################
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
