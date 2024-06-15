@@ -410,7 +410,7 @@ def Weekly_Attendance():
 			screen.blit(crown_icon, (75 + 70 * i, 200))
 	streak_font = pygame.font.SysFont("arial", 30)
 	streak_text = streak_font.render(f"{solved_days} days of solving!", True, BLACK)
-	streak_rect = streak_text.get_rect(center=(screen_x // 2, 150))
+	streak_rect = streak_text.get_rect(center=(screen_x // 2, 350))
 	screen.blit(streak_text, streak_rect)
 	screen.blit(fire_icon, (streak_rect.right + 10, streak_rect.top - 10))
 #############################################
