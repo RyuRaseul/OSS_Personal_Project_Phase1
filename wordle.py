@@ -35,6 +35,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 Dimgray = (105, 105, 105)
 Darkgray = (169, 169, 169)
+Lightblue = (232,252,252)
 
 #Setting Initial Screen BackgoundColor
 screen.fill(Darkgray)	
@@ -90,6 +91,16 @@ daily_seed = datetime.datetime.today().strftime("%Y:%m:%d")
 USED_LIST = ""
 UNUSED_LIST = ""
 UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
+
+#아이콘 이미지를 위한 변수들
+check_icon = pygame.image.load("./assets/check.png")
+check_icon = pygame.transform.scale(check_icon, (50, 50))
+cross_icon = pygame.image.load("./assets/cross.png")
+cross_icon = pygame.transform.scale(cross_icon, (50, 50))
+crown_icon = pygame.image.load("./assets/crown.png")
+crown_icon = pygame.transform.scale(crown_icon, (50, 50))
+fire_icon = pygame.image.load("./assets/fire.png")
+fire_icon = pygame.transform.scale(fire_icon, (50, 50))
 
 answer = random.choice(words.WORDS)
 
@@ -360,28 +371,37 @@ def Mode_Select():
 #############################################
 def Weekly_Attendance():
 	global attendance_data
-	pygame.draw.rect(screen, WHITE, (0, 550, 600, 300))
+
+	
+	header_font = pygame.font.SysFont("arial", 40)
+	header_text = header_font.render("WEEKLY ATTENDANCE", True, BLACK)
+	header_rect = header_text.get_rect(center=(screen_x // 2, 130))
+	screen.blit(header_text, header_rect)
+
 	day_lables = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 	day_font = pygame.font.SysFont("arial", 30)
 	attendance = attendance_data["attendance"]
 	for i in range(7):
-		pygame.draw.rect(screen, BLACK, (100 + 70*i, 200, 50, 50), 4)
+		pygame.draw.rect(screen, BLACK, (75 + 70*i, 200, 50, 50), 2)
 		weekday_text = day_font.render(day_lables[i], True, BLACK)
-		weekday_rect = weekday_text.get_rect(center = (125 + 70*i, 250))
+		weekday_rect = weekday_text.get_rect(center = (100 + 70*i, 270))
 		screen.blit(weekday_text, weekday_rect)
 	
 	for i in range(7):
 		if attendance[i] == True:
-			pygame.draw.rect(screen, GREEN, (100 + 70*i, 200, 50, 50))
+			screen.blit(check_icon, (75 + 70 * i, 200))
 		elif attendance[i] == False:
-			pygame.draw.rect(screen, RED, (100 + 70*i, 200, 50, 50))
+			screen.blit(cross_icon, (75 + 70 * i, 200))
 		else:
-			pygame.draw.rect(screen, YELLOW, (100 + 70*i, 200, 50, 50))
-		day_font = pygame.font.SysFont("arial", 30)
-		day_text = day_font.render(day_lables[i], True, BLACK)
-		day_rect = day_text.get_rect(center = (125 + 70*i, 250))
-		screen.blit(day_text, day_rect)
-	screen.blit(day_text, day_rect)
+			screen.blit(crown_icon, (75 + 70 * i, 200))
+	streak_font = pygame.font.SysFont("arial", 30)
+	streak_text = streak_font.render(f"{solved} days of solving!", True, BLACK)
+	streak_rect = streak_text.get_rect(center=(screen_x // 2, 150))
+	screen.blit(streak_text, streak_rect)
+	screen.blit(fire_icon, (streak_rect.right + 10, streak_rect.top - 10))
+#############################################
+################## PHASE 2 ##################
+#############################################		
 
 
 
@@ -413,7 +433,7 @@ while not done:
 	#############################################
 	################## PHASE 2 ##################
 	if mode == "WEEKLY":
-		screen.fill(WHITE)
+		screen.fill(Lightblue)
 		Weekly_Attendance()
 	elif result == "MODE":
 		screen.fill(WHITE)
