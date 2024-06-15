@@ -145,8 +145,23 @@ class Keyboard:
 		self.key_surface = key_font.render(self.key, True, self.key_color)
 		self.key_rect = self.key_surface.get_rect(center = (self.x + 24, self.y+33))
 	def draw(self):
-		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
-		screen.blit(self.key_surface, self.key_rect)
+		#############################################
+		################## PHASE 2 ##################
+		if self.key == "ENTER":
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 76, 70])
+			key_font = pygame.font.SysFont("arial", 20, True, False)
+			self.key_surface = key_font.render(self.key, True, self.key_color)
+			self.key_rect = self.key_surface.get_rect(center = (self.x + 38, self.y + 35))
+			screen.blit(self.key_surface, self.key_rect)
+		elif self.key == "<=":
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 76, 70])
+			self.key_rect = self.key_surface.get_rect(center = (self.x + 38, self.y + 35))
+			screen.blit(self.key_surface, self.key_rect)
+		################## PHASE 2 ##################
+		#############################################
+		else:
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
+			screen.blit(self.key_surface, self.key_rect)
 
 def create_letter(input_key):
 	global default_x, guess_word_string
@@ -221,17 +236,31 @@ def make_tiles():
 			new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
 			new_tile.draw()
 
-for i in range(3):
-	for letter in keyboard_keys[i]:
-		new_key = Keyboard(letter, keyboard_x, keyboard_y)
+for i in range(4):
+	#############################################
+	################## PHASE 2 ##################
+	if i == 3:
+		keyboard_y -= 85
+		new_key = Keyboard("<=", keyboard_x, keyboard_y)
 		keys.append(new_key)
-		new_key.draw()	
-		keyboard_x += 58
-	keyboard_y += 85
-	if i == 0:
-		keyboard_x = 44
-	elif i == 1:
-		keyboard_x = 102
+		new_key.draw()
+		keyboard_x = 15
+		new_key = Keyboard("ENTER", keyboard_x, keyboard_y)
+		keys.append(new_key)
+		new_key.draw()
+	################## PHASE 2 ##################
+	#############################################
+	else:
+		for letter in keyboard_keys[i]:
+			new_key = Keyboard(letter, keyboard_x, keyboard_y)
+			keys.append(new_key)
+			new_key.draw()	
+			keyboard_x += 58
+		keyboard_y += 85
+		if i == 0:
+			keyboard_x = 44
+		elif i == 1:
+			keyboard_x = 102
 
 #############################################
 ################## PHASE 2 ##################
