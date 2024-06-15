@@ -267,10 +267,8 @@ def update_attendance():
 		print("Update Attendance")
 		attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
 		write_attendance(attendance_data)
-		print(attendance_data)
 
-print(check_attendance())
-
+check_attendance()
 #############################################
 ################## PHASE 2 ##################
 #############################################
@@ -360,10 +358,30 @@ def Mode_Select():
 #############################################
 ################## PHASE 2 ##################
 #############################################
-def Weekly_Attendance(attendance_list):
-	screen.fill(WHITE)
+def Weekly_Attendance():
+	global attendance_data
+	pygame.draw.rect(screen, WHITE, (0, 550, 600, 300))
 	day_lables = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
-	attendance = [False for i in range(7)]
+	day_font = pygame.font.SysFont("arial", 30)
+	attendance = attendance_data["attendance"]
+	for i in range(7):
+		pygame.draw.rect(screen, BLACK, (100 + 70*i, 200, 50, 50), 4)
+		weekday_text = day_font.render(day_lables[i], True, BLACK)
+		weekday_rect = weekday_text.get_rect(center = (125 + 70*i, 250))
+		screen.blit(weekday_text, weekday_rect)
+	
+	for i in range(7):
+		if attendance[i] == True:
+			pygame.draw.rect(screen, GREEN, (100 + 70*i, 200, 50, 50))
+		elif attendance[i] == False:
+			pygame.draw.rect(screen, RED, (100 + 70*i, 200, 50, 50))
+		else:
+			pygame.draw.rect(screen, YELLOW, (100 + 70*i, 200, 50, 50))
+		day_font = pygame.font.SysFont("arial", 30)
+		day_text = day_font.render(day_lables[i], True, BLACK)
+		day_rect = day_text.get_rect(center = (125 + 70*i, 250))
+		screen.blit(day_text, day_rect)
+	screen.blit(day_text, day_rect)
 
 
 
@@ -392,18 +410,21 @@ done = False
 ## PHASE 2
 game_win = False
 while not done:
-	if result == "MODE":
+	#############################################
+	################## PHASE 2 ##################
+	if mode == "WEEKLY":
+		screen.fill(WHITE)
+		Weekly_Attendance()
+	elif result == "MODE":
+		screen.fill(WHITE)
 		Mode_Select()
 	elif result in end:
-		#############################################
-		################## PHASE 2 ##################
 		if result == "WIN" and game_win == False:
 			update_attendance()
 			game_win = True
 		game_end()
-		
-		################## PHASE 2 ##################
-		#############################################
+	################## PHASE 2 ##################
+	#############################################
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
@@ -427,23 +448,22 @@ while not done:
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
 			if result == "MODE":
-				if (150 <= mouse_pos[0] <= 450):
+					#############################################
+					################## PHASE 2 ##################
+					#############################################
+				if (100 <= mouse_pos[0] <= 500) and (600 <= mouse_pos[1] <= 700):
+					mode = "WEEKLY"
+				elif mode != "WEEKLY" and (150 <= mouse_pos[0] <= 450):
+					#############################################
+					################## PHASE 2 ##################
+					#############################################
 					if (200 <= mouse_pos[1] <= 300):
 						mode = "DAILY"
 						game_start()								
 					elif (400 <= mouse_pos[1] <=500):
 						mode = "INF"
 						game_start()
-					#############################################
-					################## PHASE 2 ##################
-					#############################################
-				if (100 <= mouse_pos[0] <= 500) and (600 <= mouse_pos[1] <= 700):
-					mode = "WEEKLY"
-					print("WEEKLY")
 
-					#############################################
-					################## PHASE 2 ##################
-					#############################################
 					
 			elif result == "":
 				if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
