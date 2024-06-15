@@ -3,6 +3,19 @@ from pygame.locals import *
 import words
 import random
 import datetime
+#############################################
+################## PHASE 2 ##################
+#############################################
+import os
+import json
+
+#출석 체크하는 json 파일 읽고 불러오기
+attendance_file = "attendance.json"
+
+#############################################
+################## PHASE 2 ##################
+#############################################
+
 #Pygame Initailize
 pygame.init()
 
@@ -61,6 +74,15 @@ daily_text = mode_font.render("Daily MODE", True, 40)
 daily_rect = daily_text.get_rect(center = (300, 250))
 inf_text = mode_font.render("INF Mode", True, 40)
 inf_rect = inf_text.get_rect(center = (300, 450))
+#############################################
+################## PHASE 2 ##################
+#############################################
+weekly_text = mode_font.render("Weekly Attendance", True, 40)
+weekly_rect = weekly_text.get_rect(center = (300, 650))
+
+#############################################
+################## PHASE 2 ##################
+#############################################
 daily_seed = datetime.datetime.today().strftime("%Y:%m:%d")
 
 
@@ -76,7 +98,6 @@ answer = random.choice(words.WORDS)
 result = "MODE"
 mode = ""
 end = ["WIN", "LOSE"]
-
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
 		self.x = x_pos
@@ -201,6 +222,27 @@ for i in range(3):
 	elif i == 1:
 		keyboard_x = 102
 
+def initialize_attendance():
+    if os.path.exists(attendance_file):
+        with open(attendance_file, 'r') as file:
+            data = json.load(file)
+    else:
+        data = {"last_date": "", "attendance": [False] * 7}
+        write_attendance(data)
+    return data
+
+def write_attendance(data):
+    with open(attendance_file, 'w') as file:
+        json.dump(data, file)
+
+def reset_attendance():
+	current_weekday = datetime.datetime.today().weekday()
+	current_date = datetime.datetime.today().strftime("%Y-%m-%d")
+	if current_weekday == 0 and data["last_date"] != current_date:
+		data = {"last_date": "", "attendance": [False] * 7}
+		write_attendance(data)
+
+
 pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
 hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
 hint_rect = hint_text.get_rect(center = (510, 35))
@@ -270,8 +312,29 @@ def Mode_Select():
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, (150, 200, 300, 100), 4)
 	pygame.draw.rect(screen, BLACK, (150, 400, 300, 100), 4)
+	#############################################
+	################## PHASE 2 ##################
+	#############################################
+	pygame.draw.rect(screen, BLACK, (100, 600, 400, 100), 4)
 	screen.blit(daily_text, daily_rect)
 	screen.blit(inf_text, inf_rect)
+	screen.blit(weekly_text, weekly_rect)
+
+	#############################################
+	################## PHASE 2 ##################
+	#############################################
+
+
+#############################################
+################## PHASE 2 ##################
+#############################################
+def Weekly_Attendance(attendance_list):
+	screen.fill(WHITE)
+	day_lables = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+	attendance = [False for i in range(7)]
+
+
+
 
 def check_keyboard_click(mouse_x, key_line):
 	if key_line == 0:
@@ -330,6 +393,17 @@ while not done:
 					elif (400 <= mouse_pos[1] <=500):
 						mode = "INF"
 						game_start()
+					#############################################
+					################## PHASE 2 ##################
+					#############################################
+				if (100 <= mouse_pos[0] <= 500) and (600 <= mouse_pos[1] <= 700):
+					mode = "WEEKLY"
+					print("WEEKLY")
+
+					#############################################
+					################## PHASE 2 ##################
+					#############################################
+					
 			elif result == "":
 				if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
 					hint_count -= 1
