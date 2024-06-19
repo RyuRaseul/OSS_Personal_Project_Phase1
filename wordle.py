@@ -288,21 +288,22 @@ def write_attendance(data):
     with open(attendance_file, 'w') as file:
         json.dump(data, file)
 
-def reset_attendance(data, current_date):
-    last_date = data["last_date"]
-    current_date = datetime.datetime.strptime(current_date, "%Y-%m-%d")
-    if (current_date - last_date).days >= 7:
-        data = {"last_date": current_date.strftime("%Y-%m-%d"), "attendance": [False] * 7}
-        return data
-    return data
-
+#한 주 지나면 출석 초기화
+def reset_attendance(data):
+	current_date = datetime.datetime.today()
+	last_date = datetime.datetime.strptime(data["last_date"], "%Y-%m-%d")
+	print(current_date, last_date)
+	if (current_date - last_date).days >= 7:
+		data = {"last_date": "", "attendance": [False] * 7}
+		return data
+	return False
 
 #오늘 출석 체크
 def check_attendance():
 	global solved_days
 	current_weekday = datetime.datetime.today().weekday()
 	data = initialize_attendance()
-	data = reset_attendance(data, current_weekday) or data
+	data = reset_attendance(data) or data
 	if data["attendance"][current_weekday] == False:
 		data["attendance"][current_weekday] = True
 		current_date = datetime.datetime.today().strftime("%Y-%m-%d")
@@ -466,9 +467,6 @@ def Weekly_Attendance():
 #############################################
 ################## PHASE 2 ##################
 #############################################		
-
-
-
 
 def check_keyboard_click(mouse_x, key_line):
 	if key_line == 0:
