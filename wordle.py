@@ -288,13 +288,14 @@ def write_attendance(data):
     with open(attendance_file, 'w') as file:
         json.dump(data, file)
 
-#월요일에 출석 초기화
-def reset_attendance(data, current_weekday):
-	current_date = datetime.datetime.today().strftime("%Y-%m-%d")
-	if current_weekday == 0 and data["last_date"] != current_date:
-		data = {"last_date": "", "attendance": [False] * 7}
-		return data
-	return False
+def reset_attendance(data, current_date):
+    last_date = datetime.datetime.strptime(data["last_date"], "%Y-%m-%d")
+    current_date = datetime.datetime.strptime(current_date, "%Y-%m-%d")
+    if (current_date - last_date).days >= 7:
+        data = {"last_date": current_date.strftime("%Y-%m-%d"), "attendance": [False] * 7}
+        return data
+    return data
+
 
 #오늘 출석 체크
 def check_attendance():
