@@ -289,7 +289,7 @@ def write_attendance(data):
         json.dump(data, file)
 
 def reset_attendance(data, current_date):
-    last_date = datetime.datetime.strptime(data["last_date"], "%Y-%m-%d")
+    last_date = data["last_date"]
     current_date = datetime.datetime.strptime(current_date, "%Y-%m-%d")
     if (current_date - last_date).days >= 7:
         data = {"last_date": current_date.strftime("%Y-%m-%d"), "attendance": [False] * 7}
