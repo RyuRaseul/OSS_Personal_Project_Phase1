@@ -3,6 +3,19 @@ from pygame.locals import *
 import words
 import random
 import datetime
+#############################################
+################## PHASE 2 ##################
+#############################################
+import os
+import json
+
+#출석 체크하는 json 파일 읽고 불러오기
+attendance_file = "attendance.json"
+
+#############################################
+################## PHASE 2 ##################
+#############################################
+
 #Pygame Initailize
 pygame.init()
 
@@ -22,6 +35,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 Dimgray = (105, 105, 105)
 Darkgray = (169, 169, 169)
+Lightblue = (232,252,252)
 
 #Setting Initial Screen BackgoundColor
 screen.fill(Darkgray)	
@@ -61,6 +75,15 @@ daily_text = mode_font.render("Daily MODE", True, 40)
 daily_rect = daily_text.get_rect(center = (300, 250))
 inf_text = mode_font.render("INF Mode", True, 40)
 inf_rect = inf_text.get_rect(center = (300, 450))
+#############################################
+################## PHASE 2 ##################
+#############################################
+weekly_text = mode_font.render("Weekly Attendance", True, 40)
+weekly_rect = weekly_text.get_rect(center = (300, 650))
+
+#############################################
+################## PHASE 2 ##################
+#############################################
 daily_seed = datetime.datetime.today().strftime("%Y:%m:%d")
 
 
@@ -69,6 +92,16 @@ USED_LIST = ""
 UNUSED_LIST = ""
 UNKNOWN_LIST = "QWERTYUIOPASDFGHJKLZXCVBNM"
 
+#아이콘 이미지를 위한 변수들
+check_icon = pygame.image.load("./assets/check.png")
+check_icon = pygame.transform.scale(check_icon, (50, 50))
+cross_icon = pygame.image.load("./assets/cross.png")
+cross_icon = pygame.transform.scale(cross_icon, (50, 50))
+crown_icon = pygame.image.load("./assets/crown.png")
+crown_icon = pygame.transform.scale(crown_icon, (50, 50))
+fire_icon = pygame.image.load("./assets/fire.png")
+fire_icon = pygame.transform.scale(fire_icon, (50, 50))
+
 answer = random.choice(words.WORDS)
 
 
@@ -76,7 +109,6 @@ answer = random.choice(words.WORDS)
 result = "MODE"
 mode = ""
 end = ["WIN", "LOSE"]
-
 class Tile:
 	def __init__(self, bg_color, x_pos, y_pos):
 		self.x = x_pos
@@ -113,8 +145,23 @@ class Keyboard:
 		self.key_surface = key_font.render(self.key, True, self.key_color)
 		self.key_rect = self.key_surface.get_rect(center = (self.x + 24, self.y+33))
 	def draw(self):
-		pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
-		screen.blit(self.key_surface, self.key_rect)
+		#############################################
+		################## PHASE 2 ##################
+		if self.key == "ENTER":
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 76, 70])
+			key_font = pygame.font.SysFont("arial", 20, True, False)
+			self.key_surface = key_font.render(self.key, True, self.key_color)
+			self.key_rect = self.key_surface.get_rect(center = (self.x + 38, self.y + 35))
+			screen.blit(self.key_surface, self.key_rect)
+		elif self.key == "<=":
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 76, 70])
+			self.key_rect = self.key_surface.get_rect(center = (self.x + 38, self.y + 35))
+			screen.blit(self.key_surface, self.key_rect)
+		################## PHASE 2 ##################
+		#############################################
+		else:
+			pygame.draw.rect(screen, self.bg_color, [self.x, self.y, 48, 70])
+			screen.blit(self.key_surface, self.key_rect)
 
 def create_letter(input_key):
 	global default_x, guess_word_string
@@ -189,17 +236,96 @@ def make_tiles():
 			new_tile = Tile(BLACK, default_x + j*(tile_spacing_x + tile_size), default_y + i*(tile_spacing_y+ tile_size))
 			new_tile.draw()
 
-for i in range(3):
-	for letter in keyboard_keys[i]:
-		new_key = Keyboard(letter, keyboard_x, keyboard_y)
+for i in range(4):
+	#############################################
+	################## PHASE 2 ##################
+	if i == 3:
+		keyboard_y -= 85
+		new_key = Keyboard("<=", keyboard_x, keyboard_y)
 		keys.append(new_key)
-		new_key.draw()	
-		keyboard_x += 58
-	keyboard_y += 85
-	if i == 0:
-		keyboard_x = 44
-	elif i == 1:
-		keyboard_x = 102
+		new_key.draw()
+		keyboard_x = 15
+		new_key = Keyboard("ENTER", keyboard_x, keyboard_y)
+		keys.append(new_key)
+		new_key.draw()
+	################## PHASE 2 ##################
+	#############################################
+	else:
+		for letter in keyboard_keys[i]:
+			new_key = Keyboard(letter, keyboard_x, keyboard_y)
+			keys.append(new_key)
+			new_key.draw()	
+			keyboard_x += 58
+		keyboard_y += 85
+		if i == 0:
+			keyboard_x = 44
+		elif i == 1:
+			keyboard_x = 102
+
+#############################################
+################## PHASE 2 ##################
+#############################################
+solved_days = 0
+
+#문제 맞힌 총 일수 계산
+def calculate_solved(attendance):
+	solved = 0
+	for state in attendance["attendance"]:
+		if state == "WIN":
+			solved += 1
+	return solved
+
+def initialize_attendance():
+    if os.path.exists(attendance_file):
+        with open(attendance_file, 'r') as file:
+            data = json.load(file)
+    else:
+        data = {"last_date": "", "attendance": [False] * 7}
+        write_attendance(data)
+    return data
+
+def write_attendance(data):
+    with open(attendance_file, 'w') as file:
+        json.dump(data, file)
+
+#한 주 지나면 출석 초기화
+def reset_attendance(data):
+	current_date = datetime.datetime.today()
+	last_date = datetime.datetime.strptime(data["last_date"], "%Y-%m-%d")
+	print(current_date, last_date)
+	if (current_date - last_date).days >= 7:
+		data = {"last_date": "", "attendance": [False] * 7}
+		return data
+	return False
+
+#오늘 출석 체크
+def check_attendance():
+	global solved_days
+	current_weekday = datetime.datetime.today().weekday()
+	data = initialize_attendance()
+	data = reset_attendance(data) or data
+	if data["attendance"][current_weekday] == False:
+		data["attendance"][current_weekday] = True
+		current_date = datetime.datetime.today().strftime("%Y-%m-%d")
+		data["last_date"] = current_date
+	write_attendance(data)
+	solved_days = calculate_solved(data)
+	return data
+
+attendance_data = check_attendance()
+
+#문제 맞혔으면 업데이트 
+def update_attendance():
+	global attendance_data, solved_days
+	attendance_data["attendance"][datetime.datetime.today().weekday()] = "WIN"
+	write_attendance(attendance_data)
+	solved_days = calculate_solved(attendance_data)
+
+
+check_attendance()
+#############################################
+################## PHASE 2 ##################
+#############################################
 
 pygame.draw.rect(screen, BLACK, (hint_x, hint_y, 100, 35), 4)
 hint_text = hint_font.render(f"HINT: {hint_count}", True, WHITE)
@@ -270,8 +396,77 @@ def Mode_Select():
 	screen.fill(WHITE)
 	pygame.draw.rect(screen, BLACK, (150, 200, 300, 100), 4)
 	pygame.draw.rect(screen, BLACK, (150, 400, 300, 100), 4)
+	#############################################
+	################## PHASE 2 ##################
+	#############################################
+	pygame.draw.rect(screen, BLACK, (100, 600, 400, 100), 4)
 	screen.blit(daily_text, daily_rect)
 	screen.blit(inf_text, inf_rect)
+	screen.blit(weekly_text, weekly_rect)
+
+	#############################################
+	################## PHASE 2 ##################
+	#############################################
+
+
+#############################################
+################## PHASE 2 ##################
+#############################################
+def Weekly_Attendance():
+    global attendance_data
+
+    def draw_text(text, font, color, center):
+        rendered_text = font.render(text, True, color)
+        text_rect = rendered_text.get_rect(center=center)
+        screen.blit(rendered_text, text_rect)
+
+    def draw_icon(icon, x, y):
+        screen.blit(icon, (x, y))
+
+    def draw_rectangle(color, x, y, width, height, thickness):
+        pygame.draw.rect(screen, color, (x, y, width, height), thickness)
+
+    header_font = pygame.font.SysFont("arial", 40)
+    day_font = pygame.font.SysFont("arial", 20)
+    solved_font = pygame.font.SysFont("arial", 30)
+    try_font = pygame.font.SysFont("arial", 40, bold=True)
+
+    #헤더 텍스트 그리기 
+    draw_text("WEEKLY ATTENDANCE", header_font, BLACK, (screen_x // 2, 130))
+
+    day_labels = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
+    attendance = attendance_data["attendance"]
+
+    # 라벨, 체크 아이콘, 엑스 아이콘, 왕관 아이콘 그리기
+    for i in range(7):
+        x_pos = 75 + 70 * i
+        draw_rectangle(BLACK, x_pos, 200, 50, 50, 2)
+        draw_text(day_labels[i], day_font, BLACK, (x_pos + 25, 270))
+        if attendance[i] == True:
+            draw_icon(check_icon, x_pos, 200)
+        elif attendance[i] == False:
+            draw_icon(cross_icon, x_pos, 200)
+        else:
+            draw_icon(crown_icon, x_pos, 200)
+
+    # 푼 문제 수 그리기
+    draw_text(f"{solved_days} days of solving!!!", solved_font, BLACK, (screen_x // 2, 320))
+    solved_rect = solved_font.render(f"{solved_days} days of solving!!!", True, BLACK).get_rect(center=(screen_x // 2, 320))
+    screen.blit(fire_icon, (solved_rect.right + 10, solved_rect.top - 10))
+    screen.blit(fire_icon, (solved_rect.left - 70, solved_rect.top - 10))
+
+    draw_text("START GAME?", try_font, BLACK, (300, 420))
+
+    # 버튼 그리기
+    draw_rectangle(BLACK, 150, 480, 300, 80, 4)
+    draw_rectangle(BLACK, 150, 580, 300, 80, 4)
+    screen.blit(daily_text, daily_text.get_rect(center=(300, 520)))
+    screen.blit(inf_text, inf_text.get_rect(center=(300, 620)))
+
+
+#############################################
+################## PHASE 2 ##################
+#############################################		
 
 def check_keyboard_click(mouse_x, key_line):
 	if key_line == 0:
@@ -294,12 +489,24 @@ def check_keyboard_click(mouse_x, key_line):
 				create_letter(clicked_letter.key)
 		
 done = False
-
+## PHASE 2
+game_win = False
 while not done:
-	if result == "MODE":
+	#############################################
+	################## PHASE 2 ##################
+	if mode == "WEEKLY":
+		screen.fill(WHITE)
+		Weekly_Attendance()
+	elif result == "MODE":
+		screen.fill(WHITE)
 		Mode_Select()
 	elif result in end:
+		if result == "WIN" and game_win == False:
+			update_attendance()
+			game_win = True
 		game_end()
+	################## PHASE 2 ##################
+	#############################################
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			done = True
@@ -310,6 +517,7 @@ while not done:
 						game_start()
 					else:
 						result = "MODE"
+						mode = ""
 				elif len(guess_word_string) == 5 and guess_word_string.lower() in words.WORDS:
 						guess_check(guess_word)
 			elif event.key == pygame.K_BACKSPACE:
@@ -322,14 +530,31 @@ while not done:
 						create_letter(key_pressed)
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			mouse_pos = pygame.mouse.get_pos()
-			if result == "MODE":
-				if (150 <= mouse_pos[0] <= 450):
+			if result == "MODE" and mode == "":
+					#############################################
+					################## PHASE 2 ##################
+					#############################################
+				if (100 <= mouse_pos[0] <= 500) and (600 <= mouse_pos[1] <= 700):
+					mode = "WEEKLY"
+				elif mode != "WEEKLY" and (150 <= mouse_pos[0] <= 450):
+					#######################x######################
+					################## PHASE 2 ##################
+					#############################################
 					if (200 <= mouse_pos[1] <= 300):
 						mode = "DAILY"
 						game_start()								
 					elif (400 <= mouse_pos[1] <=500):
 						mode = "INF"
 						game_start()
+			elif result == "MODE" and mode == "WEEKLY":
+				if (150 <= mouse_pos[0] <= 450) and (480 <= mouse_pos[1] <= 560):
+					mode = "DAILY"
+					game_start()
+				elif (150 <= mouse_pos[0] <= 450) and (580 <= mouse_pos[1] <= 660):
+					mode = "INF"
+					game_start()
+
+					
 			elif result == "":
 				if hint_count > 0 and (460 <= mouse_pos[0] <= 560 and 20 <= mouse_pos[1] <= 55):
 					hint_count -= 1
@@ -340,7 +565,16 @@ while not done:
 					elif (44 <= mouse_pos[0] <= 556) and (635 <= mouse_pos[1] <= 705):
 						check_keyboard_click(mouse_pos[0], 1)	
 					elif (102 <= mouse_pos[0] <= 498) and (720 <= mouse_pos[1] <= 790):	
-						check_keyboard_click(mouse_pos[0], 2)	
+						check_keyboard_click(mouse_pos[0], 2)
+				#############################################
+				################## PHASE 2 ##################
+				elif len(guess_word_string) == 5:
+					if (15 <= mouse_pos[0] <= 90) and guess_word_string.lower() in words.WORDS:
+						guess_check(guess_word)
+				if (508 <= mouse_pos[0] <= 585) and (720 <= mouse_pos[1] <= 790):
+					delete_letter()
+				################## PHASE 2 ##################
+				#############################################
 	pygame.display.flip()
 
 
